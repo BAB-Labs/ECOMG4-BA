@@ -1,0 +1,18 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "install-dependencies",
+			"type": "shell",
+			"command": "nvm install 22.11.0; nvm use v22.11.0",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [],
+			"runOptions": {
+				"runOn": "folderOpen"
+			}
+		}
+	]
+}

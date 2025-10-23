@@ -1,0 +1,16 @@
+
+#!/bin/sh
+
+BRANCH=$(git symbolic-ref --short HEAD)
+
+if [ "$BRANCH" = "staging" ]; then
+  echo "📍 Estás en la rama 'staging'. Ejecutando pruebas..."
+   echo "🧪 Ejecutando tests con servidor..."
+  
+  if ! pnpm test:with-server; then
+    echo "❌ Tests fallaron. Corrige los errores antes de hacer commit."
+    exit 1
+  fi
+else
+  echo "🚫 No estás en la rama 'staging'. No se ejecutan los tests."
+fi
