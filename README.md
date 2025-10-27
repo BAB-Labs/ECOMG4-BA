@@ -137,27 +137,27 @@ ECOMG4-BA/
 
    Crear la base de datos y tabla de usuarios:
 
-   ```sql
-  CREATE DATABASE IF NOT EXISTS ecommerce_mvp;
-  USE ecommerce_mvp;
+    ```sql
+    CREATE DATABASE IF NOT EXISTS ecommerce_mvp;
+    USE ecommerce_mvp;
 
-  CREATE TABLE users (
-      id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-      first_name VARCHAR(100) NOT NULL,
-      last_name VARCHAR(100) NOT NULL,
-      email VARCHAR(255) NOT NULL,
-      password_hash VARCHAR(255) NOT NULL,
-      shipping_address TEXT NULL,
-      city VARCHAR(100) NULL,
-      postal_code VARCHAR(20) NULL,
-      phone_number VARCHAR(50) NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-      
-      PRIMARY KEY (id),
-      UNIQUE KEY uk_users_email (email),
-      INDEX idx_users_email (email)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    CREATE TABLE users (
+        id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        first_name VARCHAR(100) NOT NULL,
+        last_name VARCHAR(100) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        password_hash VARCHAR(255) NOT NULL,
+        shipping_address TEXT NULL,
+        city VARCHAR(100) NULL,
+        postal_code VARCHAR(20) NULL,
+        phone_number VARCHAR(50) NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        
+        PRIMARY KEY (id),
+        UNIQUE KEY uk_users_email (email),
+        INDEX idx_users_email (email)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
    ```
 
 ## 🚀 Uso
