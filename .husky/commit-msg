@@ -4,7 +4,7 @@ echo "🔍 Validando mensaje de commit..."
 # Expresión regular mejorada:
 # tipo(scope opcional): descripción mínima de 10 caracteres
 # git commit -m "feat(funcionalidad): "Nueva funcionalidad para el sistema"
-commit_regex="^(feat|fix|docs|style|refactor|perf|test|chore|ci|build|revert)(\([a-zA-Z0-9_-]+\))?: ?.{10,}$"
+commit_regex="^(feat|fix|docs|style|refactor|perf|test|chore|ci|build|revert)(\([a-zA-Z0-9_-]+\))?:[[:space:]]+.{10,}$"
 commit_msg=$(cat "$1")
 
 if ! echo "$commit_msg" | grep -Eq "$commit_regex"; then
