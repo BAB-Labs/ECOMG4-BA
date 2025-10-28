@@ -19,7 +19,7 @@ app.use(morgan("dev"));
 
 // Ruta raiz
 app.get("/", (_req, res) => {
-	res.status(304).json({
+	res.status(200).json({
 		description:
 			"E-Commerce para la gestion de contenido en productos y servicios del mercado",
 		name: "E-commerce",
