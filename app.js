@@ -3,7 +3,13 @@ import morgan from "morgan";
 import cors from "cors";
 import { config } from "./src/config/config.js";
 import { corsOptions } from "./src/middlewares/cors.middlewares.js";
-import logger from "./src/config/logger.js";
+import {
+	logInfo,
+	logError,
+	logWarning,
+	logHttp,
+	logDebug,
+} from "./src/config/logger.js";
 
 const port = config.port ?? 3000;
 
@@ -16,13 +22,13 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(
 	morgan("combined", {
 		stream: {
-			write: (message) => logger.http(message.trim()),
+			write: (message) => logHttp(message.trim()),
 		},
 	}),
 );
 
 app.get("/", (_req, res) => {
-	logger.info("Root endpoint accessed");
+	logInfo("Root endpoint accessed");
 
 	res.status(200).json({
 		description:
@@ -38,8 +44,19 @@ app.get("/", (_req, res) => {
 	});
 });
 
+app.get("/health", (_req, res) => {
+	logInfo("Health check endpoint called");
+
+	res.status(200).json({
+		status: "OK",
+		message: "API funcionando correctamente",
+		timestamp: new Date().toISOString(),
+		environment: process.env.NODE_ENV,
+	});
+});
+
 app.use((req, res, next) => {
-	logger.warn(`Ruta no encontrada: ${req.originalUrl}`);
+	logWarning(`Ruta no encontrada: ${req.originalUrl}`);
 
 	res.status(404).json({
 		error: "Ruta no encontrada",
@@ -49,7 +66,7 @@ app.use((req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
-	logger.error("Error no manejado:", error);
+	logError("Error no manejado", error);
 
 	res.status(500).json({
 		error: "Error interno del servidor",
@@ -60,11 +77,11 @@ app.use((error, req, res, next) => {
 });
 
 app.listen(port, () => {
-	logger.info(
+	logInfo(
 		`API funcionando correctamente, servidor corriendo en el puerto http://localhost:${port}`,
 	);
-	logger.debug(`Entorno: ${process.env.NODE_ENV}`);
-	logger.debug(`Log level: ${process.env.LOG_LEVEL || "info"}`);
+	logDebug(`Entorno: ${process.env.NODE_ENV}`);
+	logDebug(`Log level: ${process.env.LOG_LEVEL || "info"}`);
 });
 
 export default app;
