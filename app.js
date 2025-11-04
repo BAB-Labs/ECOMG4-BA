@@ -2,7 +2,6 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import { config } from "./src/config/config.js";
-import { corsOptions } from "./src/middlewares/cors.middlewares.js";
 import {
 	logInfo,
 	logError,
@@ -10,15 +9,23 @@ import {
 	logHttp,
 	logDebug,
 } from "./src/config/logger.js";
+import routes from "./src/routes/index.js";
+import {
+	corsOptions,
+	notFoundHandler,
+	errorHandler,
+} from "./src/middlewares/index.js";
 
 const port = config.port ?? 3000;
 
 const app = express();
 
+// Middlewares básicos
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
+// Morgan con logger centralizado
 app.use(
 	morgan("combined", {
 		stream: {
@@ -27,6 +34,10 @@ app.use(
 	}),
 );
 
+// RUTAS CENTRALIZADAS
+app.use(routes);
+
+// Ruta raíz
 app.get("/", (_req, res) => {
 	logInfo("Root endpoint accessed");
 
@@ -44,37 +55,11 @@ app.get("/", (_req, res) => {
 	});
 });
 
-app.get("/health", (_req, res) => {
-	logInfo("Health check endpoint called");
+// Middleware para rutas no encontradas (404) - DEBE IR DESPUÉS DE LAS RUTAS
+app.use(notFoundHandler);
 
-	res.status(200).json({
-		status: "OK",
-		message: "API funcionando correctamente",
-		timestamp: new Date().toISOString(),
-		environment: process.env.NODE_ENV,
-	});
-});
-
-app.use((req, res, next) => {
-	logWarning(`Ruta no encontrada: ${req.originalUrl}`);
-
-	res.status(404).json({
-		error: "Ruta no encontrada",
-		path: req.originalUrl,
-		timestamp: new Date().toISOString(),
-	});
-});
-
-app.use((error, req, res, next) => {
-	logError("Error no manejado", error);
-
-	res.status(500).json({
-		error: "Error interno del servidor",
-		message:
-			process.env.NODE_ENV === "development" ? error.message : "Algo salió mal",
-		timestamp: new Date().toISOString(),
-	});
-});
+// Middleware global de manejo de errores - DEBE IR AL FINAL
+app.use(errorHandler);
 
 app.listen(port, () => {
 	logInfo(
