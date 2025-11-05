@@ -1,42 +1,41 @@
-// Importaciones
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import { config } from "./src/config/config.js";
+import { logInfo } from "./src/config/logger.js";
+import routes from "./src/routes/index.js"; // ✅ HEALTH CHECK ROUTES
 import { corsOptions } from "./src/middlewares/cors.middlewares.js";
 
-// Puerto que se tiene que ocupar
 const port = config.port ?? 3000;
 
-// Crear instancia de la aplicación
 const app = express();
 
-//  Middlewares
+// Middlewares básicos
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-app.use(morgan("dev"));
 
-// Ruta raiz
+// Morgan básico
+app.use(morgan("combined"));
+
+// ✅ RUTAS CENTRALIZADAS - INCLUYE HEALTH CHECK
+app.use(routes);
+
+// Ruta raíz
 app.get("/", (_req, res) => {
+	logInfo("Root endpoint accessed"); // ✅ USO DEL LOGGER PARA HEALTH CHECK
 	res.status(200).json({
-		description:
-			"E-Commerce para la gestion de contenido en productos y servicios del mercado",
+		description: "E-Commerce API",
 		name: "E-commerce",
 		version: "0.0.1",
-		author: {
-			name: "BAB-Labs",
-			github: "https://github.com/BAB-Labs",
-		},
 		api: "/api/v1",
 		status: "🟢 API funcionando correctamente",
-		// documentation: `${config.docs.baseUrl}`,
 	});
 });
 
-// Levantando el servidor y esuchando en el puerto localhost:3000
 app.listen(port, () => {
-	console.log(
-		`API funcionando correctamente, servidor corriendo en el puerto http://localhost:${port}`,
-	);
+	console.log(`🚀 Servidor en http://localhost:${port}`);
+	console.log(`📊 Health Check: http://localhost:${port}/api/v1/health`);
 });
+
+export default app;
