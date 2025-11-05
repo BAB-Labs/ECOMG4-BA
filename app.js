@@ -1,42 +1,57 @@
-// Importaciones
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import { config } from "./src/config/config.js";
+import {
+	logInfo,
+	logError,
+	logWarning,
+	logHttp,
+	logDebug,
+} from "./src/config/logger.js";
 import { corsOptions } from "./src/middlewares/cors.middlewares.js";
 
-// Puerto que se tiene que ocupar
 const port = config.port ?? 3000;
 
-// Crear instancia de la aplicación
 const app = express();
 
-//  Middlewares
+// Middlewares básicos
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-app.use(morgan("dev"));
 
-// Ruta raiz
+// ✅ PARTE DEL LOGGER: Morgan integrado con Winston
+app.use(
+	morgan("combined", {
+		stream: {
+			write: (message) => logHttp(message.trim()),
+		},
+	}),
+);
+
+// Ruta raíz básica (sin health check, sin rutas centralizadas)
 app.get("/", (_req, res) => {
+	logInfo("Root endpoint accessed"); // ✅ USO DEL LOGGER
 	res.status(200).json({
-		description:
-			"E-Commerce para la gestion de contenido en productos y servicios del mercado",
+		description: "E-Commerce API",
 		name: "E-commerce",
 		version: "0.0.1",
-		author: {
-			name: "BAB-Labs",
-			github: "https://github.com/BAB-Labs",
-		},
-		api: "/api/v1",
 		status: "🟢 API funcionando correctamente",
-		// documentation: `${config.docs.baseUrl}`,
 	});
 });
 
-// Levantando el servidor y esuchando en el puerto localhost:3000
 app.listen(port, () => {
-	console.log(
-		`API funcionando correctamente, servidor corriendo en el puerto http://localhost:${port}`,
-	);
+	// ✅ PARTE DEL LOGGER: Mensaje visible
+	console.log(`\n🚀 ========================================`);
+	console.log(`🚀  BACKEND INICIADO CORRECTAMENTE`);
+	console.log(`🚀  Servidor: http://localhost:${port}`);
+	console.log(`🚀  Entorno: ${process.env.NODE_ENV || "development"}`);
+	console.log(`🚀  Hora: ${new Date().toLocaleString()}`);
+	console.log(`🚀 ========================================\n`);
+
+	// ✅ PARTE DEL LOGGER: Logs con Winston
+	logInfo(`API funcionando en puerto http://localhost:${port}`);
+	logDebug(`Entorno: ${process.env.NODE_ENV}`);
 });
+
+export default app;
