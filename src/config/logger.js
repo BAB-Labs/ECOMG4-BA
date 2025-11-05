@@ -1,57 +1,86 @@
-import express from "express";
-import morgan from "morgan";
-import cors from "cors";
-import { config } from "./src/config/config.js";
-import {
-	logInfo,
-	logError,
-	logWarning,
-	logHttp,
-	logDebug,
-} from "./src/config/logger.js";
-import { corsOptions } from "./src/middlewares/cors.middlewares.js";
+import winston from "winston";
+import path from "path";
 
-const port = config.port ?? 3000;
+// Definir niveles de log y colores
+const logLevels = {
+	error: 0,
+	warn: 1,
+	info: 2,
+	http: 3,
+	debug: 4,
+};
 
-const app = express();
+// Configurar formatos
+const logFormat = winston.format.combine(
+	winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+	winston.format.errors({ stack: true }),
+	winston.format.json(),
+);
 
-// Middlewares básicos
-app.use(cors(corsOptions));
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-
-// Morgan con logger centralizado - ✅ PARTE DEL LOGGER
-app.use(
-	morgan("combined", {
-		stream: {
-			write: (message) => logHttp(message.trim()),
-		},
+const consoleFormat = winston.format.combine(
+	winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+	winston.format.colorize(),
+	winston.format.printf(({ timestamp, level, message, stack }) => {
+		if (stack) {
+			return `${timestamp} ${level}: ${message}\n${stack}`;
+		}
+		return `${timestamp} ${level}: ${message}`;
 	}),
 );
 
-// Ruta raíz básica
-app.get("/", (_req, res) => {
-	logInfo("Root endpoint accessed");
-	res.status(200).json({
-		description: "E-Commerce API",
-		name: "E-commerce",
-		version: "0.0.1",
-		status: "🟢 API funcionando correctamente",
-	});
+// Crear el logger
+const logger = winston.createLogger({
+	levels: logLevels,
+	level: process.env.LOG_LEVEL || "info",
+	format: logFormat,
+	transports: [
+		// Archivo para todos los logs
+		new winston.transports.File({
+			filename: path.join("logs", "combined.log"),
+			level: "debug",
+		}),
+		// Archivo solo para errores
+		new winston.transports.File({
+			filename: path.join("logs", "error.log"),
+			level: "error",
+		}),
+	],
 });
 
-app.listen(port, () => {
-	// MENSAJE SUPER VISIBLE - ✅ PARTE DEL LOGGER
-	console.log(`\n🚀 ========================================`);
-	console.log(`🚀  BACKEND INICIADO CORRECTAMENTE`);
-	console.log(`🚀  Servidor: http://localhost:${port}`);
-	console.log(`🚀  Entorno: ${process.env.NODE_ENV || "development"}`);
-	console.log(`🚀  Hora: ${new Date().toLocaleString()}`);
-	console.log(`🚀 ========================================\n`);
+// Si estamos en desarrollo, agregar consola con colores
+if (process.env.NODE_ENV === "development") {
+	logger.add(
+		new winston.transports.Console({
+			format: consoleFormat,
+			level: "debug",
+		}),
+	);
+}
 
-	// Logs Winston - ✅ PARTE DEL LOGGER
-	logInfo(`API funcionando en puerto http://localhost:${port}`);
-	logDebug(`Entorno: ${process.env.NODE_ENV}`);
-});
+// FUNCIONES HELPER CENTRALIZADAS
+export const logInfo = (message, meta = {}) => {
+	logger.info(message, meta);
+};
 
-export default app;
+export const logError = (message, error = null) => {
+	if (error) {
+		logger.error(message, { error: error.message, stack: error.stack });
+	} else {
+		logger.error(message);
+	}
+};
+
+export const logWarning = (message, meta = {}) => {
+	logger.warn(message, meta);
+};
+
+export const logDebug = (message, meta = {}) => {
+	logger.debug(message, meta);
+};
+
+export const logHttp = (message, meta = {}) => {
+	logger.http(message, meta);
+};
+
+// Exportar el logger original también por si se necesita
+export default logger;
