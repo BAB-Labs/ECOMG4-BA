@@ -22,6 +22,7 @@ app.use(morgan("combined"));
 
 // Ruta raíz básica
 app.get("/", (_req, res) => {
+	logInfo("Root endpoint accessed"); // ✅ USO DEL LOGGER
 	res.status(200).json({
 		description: "E-Commerce API",
 		name: "E-commerce",
