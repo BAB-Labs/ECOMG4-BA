@@ -3,13 +3,10 @@ import morgan from "morgan";
 import cors from "cors";
 import { config } from "./src/config/config.js";
 import {
-	logInfo,
-	logError,
-	logWarning,
-	logHttp,
-	logDebug,
-} from "./src/config/logger.js";
-import { corsOptions } from "./src/middlewares/cors.middlewares.js";
+	corsOptions,
+	notFoundHandler,
+	errorHandler,
+} from "./src/middlewares/index.js";
 
 const port = config.port ?? 3000;
 
@@ -20,16 +17,10 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// ✅ PARTE DEL LOGGER: Morgan integrado con Winston
-app.use(
-	morgan("combined", {
-		stream: {
-			write: (message) => logHttp(message.trim()),
-		},
-	}),
-);
+// Morgan básico (sin integración con Winston para este ticket)
+app.use(morgan("combined"));
 
-// Ruta raíz básica (sin health check, sin rutas centralizadas)
+// Ruta raíz básica
 app.get("/", (_req, res) => {
 	logInfo("Root endpoint accessed"); // ✅ USO DEL LOGGER
 	res.status(200).json({
@@ -40,18 +31,21 @@ app.get("/", (_req, res) => {
 	});
 });
 
-app.listen(port, () => {
-	// ✅ PARTE DEL LOGGER: Mensaje visible
-	console.log(`\n🚀 ========================================`);
-	console.log(`🚀  BACKEND INICIADO CORRECTAMENTE`);
-	console.log(`🚀  Servidor: http://localhost:${port}`);
-	console.log(`🚀  Entorno: ${process.env.NODE_ENV || "development"}`);
-	console.log(`🚀  Hora: ${new Date().toLocaleString()}`);
-	console.log(`🚀 ========================================\n`);
+// ✅ RUTA DE PRUEBA PARA VALIDAR ERROR HANDLER (REMOVER ANTES DEL COMMIT)
+app.get("/api/test-error", (req, res, next) => {
+	const testError = new Error("Error de prueba para validar error handler");
+	testError.statusCode = 418; // I'm a teapot
+	next(testError);
+});
 
-	// ✅ PARTE DEL LOGGER: Logs con Winston
-	logInfo(`API funcionando en puerto http://localhost:${port}`);
-	logDebug(`Entorno: ${process.env.NODE_ENV}`);
+// ✅ MIDDLEWARES DE ERROR - PARTE DEL ERROR HANDLER
+app.use(notFoundHandler);
+app.use(errorHandler);
+
+app.listen(port, () => {
+	console.log(`🚀 Servidor en http://localhost:${port}`);
+	console.log(`⚠️  Ruta de prueba: http://localhost:${port}/api/test-error`);
+	console.log(`🔍 Prueba 404: http://localhost:${port}/ruta-inexistente`);
 });
 
 export default app;
