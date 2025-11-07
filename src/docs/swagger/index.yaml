@@ -1,0 +1,201 @@
+openapi: 3.0.1
+info:
+  title: ECOMG4-BA
+  description: ''
+  version: 1.0.0
+tags:
+  - name: ECOMG4-BA
+  - name: ECOMG4-BA/Health
+paths:
+  /health:
+    get:
+      summary: GET Health Service
+      deprecated: false
+      description: ''
+      tags:
+        - ECOMG4-BA/Health
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  timestamp:
+                    type: string
+                  environment:
+                    type: string
+                  database:
+                    type: string
+                  uptime:
+                    type: string
+                  memoryUsage:
+                    type: object
+                    properties:
+                      rss:
+                        type: string
+                      heapTotal:
+                        type: string
+                      heapUsed:
+                        type: string
+                    required:
+                      - rss
+                      - heapTotal
+                      - heapUsed
+                    x-apidog-orders:
+                      - rss
+                      - heapTotal
+                      - heapUsed
+                    x-apidog-ignore-properties: []
+                  version:
+                    type: string
+                  databaseDetails:
+                    type: object
+                    properties:
+                      host:
+                        type: string
+                      database:
+                        type: string
+                      connectionLimit:
+                        type: integer
+                    required:
+                      - host
+                      - database
+                      - connectionLimit
+                    x-apidog-orders:
+                      - host
+                      - database
+                      - connectionLimit
+                    x-apidog-ignore-properties: []
+                required:
+                  - status
+                  - message
+                  - timestamp
+                  - environment
+                  - database
+                  - uptime
+                  - memoryUsage
+                  - version
+                  - databaseDetails
+                x-apidog-orders:
+                  - status
+                  - message
+                  - timestamp
+                  - environment
+                  - database
+                  - uptime
+                  - memoryUsage
+                  - version
+                  - databaseDetails
+                x-apidog-ignore-properties: []
+              example:
+                status: OK
+                message: API funcionando correctamente
+                timestamp: '2025-11-06T23:39:38.163Z'
+                environment: development
+                database: connected
+                uptime: 18 segundos
+                memoryUsage:
+                  rss: 53.28 MB
+                  heapTotal: 14.89 MB
+                  heapUsed: 13.08 MB
+                version: v1
+                databaseDetails:
+                  host: localhost
+                  database: ecommerce_mvp
+                  connectionLimit: 10
+          headers: {}
+          x-apidog-name: GET Health Service 200
+        '503':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  timestamp:
+                    type: string
+                  environment:
+                    type: string
+                  database:
+                    type: string
+                  uptime:
+                    type: string
+                  memoryUsage:
+                    type: object
+                    properties:
+                      rss:
+                        type: string
+                      heapTotal:
+                        type: string
+                      heapUsed:
+                        type: string
+                    required:
+                      - rss
+                      - heapTotal
+                      - heapUsed
+                    x-apidog-orders:
+                      - rss
+                      - heapTotal
+                      - heapUsed
+                    x-apidog-ignore-properties: []
+                  version:
+                    type: string
+                  error:
+                    type: string
+                required:
+                  - status
+                  - message
+                  - timestamp
+                  - environment
+                  - database
+                  - uptime
+                  - memoryUsage
+                  - version
+                  - error
+                x-apidog-orders:
+                  - status
+                  - message
+                  - timestamp
+                  - environment
+                  - database
+                  - uptime
+                  - memoryUsage
+                  - version
+                  - error
+                x-apidog-ignore-properties: []
+              example:
+                status: Service Unavailable
+                message: Problema de conexión con la base de datos
+                timestamp: '2025-11-06T23:21:20.100Z'
+                environment: development
+                database: error
+                uptime: 71 segundos
+                memoryUsage:
+                  rss: 53.34 MB
+                  heapTotal: 15.32 MB
+                  heapUsed: 13.38 MB
+                version: 1.0.0
+                error: 'Access denied for user ''''@''localhost'' (using password: NO)'
+          headers: {}
+          x-apidog-name: GET Health Service 503
+      security: []
+      x-apidog-folder: ECOMG4-BA/Health
+      x-apidog-status: released
+      x-run-in-apidog: https://apidog.com/web/project/1116533/apis/api-23911584-run
+components:
+  schemas: {}
+  securitySchemes: {}
+servers:
+  - url: http://localhost:3000/api/v1
+    description: ECOMG4-BA
