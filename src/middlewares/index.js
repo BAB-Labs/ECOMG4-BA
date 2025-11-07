@@ -1,3 +1,3 @@
-export { corsOptions } from "./cors.middlewares.js";
-export { notFoundHandler, errorHandler } from "./errorHandler.js";
-// Exportar otros middlewares que se creen en el futuro
+export * from "./cors.middlewares.js";
+export * from "./error.handler.middleware.js";
+export * from "./index.js";
