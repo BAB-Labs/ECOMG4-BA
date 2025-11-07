@@ -1,9 +1,9 @@
-import { logError, logWarning } from "../config/logger.js";
+import { logError, logWarning } from "../utils/logger.utils.js";
 
 /**
  * @description Middleware para manejar rutas no encontradas (404)
  */
-export const notFoundHandler = (req, res, next) => {
+export const notFoundHandler = (req, res, _next) => {
 	logWarning(`Ruta no encontrada: ${req.method} ${req.originalUrl}`, {
 		ip: req.ip,
 		userAgent: req.get("User-Agent"),
@@ -22,7 +22,7 @@ export const notFoundHandler = (req, res, next) => {
 /**
  * @description Middleware global para manejo de errores
  */
-export const errorHandler = (error, req, res, next) => {
+export const errorHandler = (error, req, res, _next) => {
 	// Log del error con Winston centralizado
 	logError("Error no manejado:", {
 		message: error.message,

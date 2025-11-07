@@ -1,8 +1,13 @@
 import { Router } from "express";
 import healthRoutes from "./health.routes.js";
+import { config } from "../config/config.js";
 
 const router = Router();
 
-router.use("/api/v1", healthRoutes);
+// ✅ 1. Se ocupa el path de la ruta para la api (/api/v1)
+const base = config.api.basePath;
+
+// ✅ 2. Construccion de rutas globales para el backend
+router.use(`${base}/health`, healthRoutes);
 
 export default router;
