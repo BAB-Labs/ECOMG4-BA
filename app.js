@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
+import helmet from "helmet";
 import { config } from "./src/config/config.js";
 import { logInfo } from "./src/utils/logger.utils.js";
 import routes from "./src/routes/index.js";
@@ -23,6 +24,7 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 app.use(morgan("combined"));
+app.use(helmet());
 
 // ✅ 3. Rutas Centralizadas
 app.use(routes);
