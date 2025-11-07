@@ -9,21 +9,25 @@ import {
 	errorHandler,
 	notFoundHandler,
 } from "./src/middlewares/index.js";
+import { setupSwagger } from "./src/config/swagger.config.js";
 
 const port = config.port ?? 3000;
 
 const app = express();
 
-// ✅ 1. Middlewares básicos
+// ✅ 2. Configuracion de swagger para la documentacion de API's
+setupSwagger(app);
+
+// ✅ 2. Middlewares básicos
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 app.use(morgan("combined"));
 
-// ✅ 2. Rutas Centralizadas
+// ✅ 3. Rutas Centralizadas
 app.use(routes);
 
-// ✅ 3. Ruta raíz de entrada cuando entras al servidor local
+// ✅ 4. Ruta raíz de entrada cuando entras al servidor local
 app.get("/", (_req, res) => {
 	logInfo("Root endpoint accessed");
 	res.status(200).json({
@@ -37,17 +41,18 @@ app.get("/", (_req, res) => {
 		},
 		api: "/api/v1",
 		status: "🟢 API funcionando correctamente",
+		documentation: `${config.docs.baseUrl}`,
 	});
 });
 
-// ✅ 4. Middleware de errores
+// ✅ 5. Middleware de errores
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-// ✅ 5. Asignacion del puerto para el backend
+// ✅ 6. Asignacion del puerto para el backend
 app.set("port", port);
 
-// ✅ 6. Ejecucion del servidor de forma local
+// ✅ 7. Ejecucion del servidor de forma local
 app.listen(app.get("port"), () => {
 	console.log(`\n🚀 ========================================`);
 	console.log(`🚀  BACKEND INICIADO CORRECTAMENTE`);
