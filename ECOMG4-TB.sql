@@ -1,9 +1,9 @@
-CREATE DATABASE IF NOT EXISTS ecommerce_mvp;
-USE ecommerce_mvp;
+-- CREATE DATABASE IF NOT EXISTS ecommerce_mvp;
+-- USE ecommerce_mvp;
 
-SET default_storage_engine = InnoDB;
-SET NAMES utf8mb4;
-SET CHARACTER SET utf8mb4;
+-- SET default_storage_engine = InnoDB;
+-- SET NAMES utf8mb4;
+-- SET CHARACTER SET utf8mb4;
 
 CREATE TABLE users (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
