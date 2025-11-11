@@ -8,7 +8,8 @@
 		"dev": "node --watch app.js",
 		"format": "pnpm exec biome format --write .",
 		"lint": "pnpm exec biome lint --write .",
-		"prepare": "husky"
+		"prepare": "husky",
+		"seed": "node src/seeders/seed.js"
 	},
 	"keywords": [
 		"Node",
@@ -23,6 +24,7 @@
 		"Winston",
 		"Morgan"
 	],
+
 	"author": "BAB-Labs",
 	"license": "ISC",
 	"packageManager": "pnpm@10.19.0",
