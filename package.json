@@ -9,6 +9,7 @@
 		"format": "pnpm exec biome format --write .",
 		"lint": "pnpm exec biome lint --write .",
 		"prepare": "husky",
+		"seed": "node src/seeders/seed.js"
 		"db:create": "node src/database/create.database.js"
 	},
 	"keywords": [
@@ -24,6 +25,7 @@
 		"Winston",
 		"Morgan"
 	],
+
 	"author": "BAB-Labs",
 	"license": "ISC",
 	"packageManager": "pnpm@10.19.0",
