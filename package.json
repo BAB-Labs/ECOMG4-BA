@@ -9,7 +9,7 @@
 		"format": "pnpm exec biome format --write .",
 		"lint": "pnpm exec biome lint --write .",
 		"prepare": "husky",
-		"seed": "node src/seeders/seed.js"
+		"seed": "node src/database/seed.database.js",
 		"db:create": "node src/database/create.database.js"
 	},
 	"keywords": [

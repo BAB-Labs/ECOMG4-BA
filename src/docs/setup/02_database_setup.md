@@ -43,6 +43,7 @@ Almacena los datos de los usuarios finales del sistema.
 | `city` | VARCHAR(100) | Ciudad del usuario. |
 | `postal_code` | VARCHAR(20) | Código postal. |
 | `phone_number` | VARCHAR(50) | Teléfono de contacto. |
+| `theme` | VARCHAR(10) | Tema D/L en ECOMG4-FE |
 | `created_at` | TIMESTAMP | Fecha de registro. |
 | `updated_at` | TIMESTAMP | Fecha de última actualización. |
 

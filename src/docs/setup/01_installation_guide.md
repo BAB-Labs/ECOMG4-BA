@@ -17,6 +17,7 @@ Asegúrate de tener instaladas las siguientes herramientas:
 | MySQL Workbench | 8.x | Cliente de base de datos |
 | Visual Studio Code | — | Editor de código |
 | Git | Última versión | Control de versiones |
+| Postman | Última versión | Herramienta para probar API´s |
 
 > ⚙️ **Nota:** No se requiere configuración SSH para Git en este proyecto.
 
@@ -48,7 +49,7 @@ Luego, reinicia la terminal y verifica:
 1. **Instala y habilita Corepack:**
 ```shell
     npm install --global corepack@latest
-    corepack enable pnpm
+    npm install -g pnpm@latest-10
 ```
 2. **Verifica:**
 ```shell

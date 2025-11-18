@@ -21,6 +21,9 @@ const createDataBase = async () => {
 	} catch (error) {
 		console.error("❌ Error ejecutando script SQL:", error.message);
 		return;
+	} finally {
+		await pool.end();
+		process.exit(0);
 	}
 };
 
