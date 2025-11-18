@@ -10,6 +10,7 @@
 		"lint": "pnpm exec biome lint --write .",
 		"prepare": "husky",
 		"seed": "node src/seeders/seed.js"
+		"db:create": "node src/database/create.database.js"
 	},
 	"keywords": [
 		"Node",

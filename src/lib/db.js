@@ -4,6 +4,7 @@ import { config } from "../config/config.js";
 //Creando conexion pool y su configuracion
 export const pool = mysql.createPool({
 	host: config.db.host,
+	port: config.db.port,
 	user: config.db.user,
 	password: config.db.password,
 	database: config.db.database,
@@ -14,6 +15,7 @@ export const pool = mysql.createPool({
 	idleTimeout: config.db.idleTimeout,
 	enableKeepAlive: config.db.enableKeepAlive,
 	keepAliveInitialDelay: config.db.keepAliveInitialDelay,
+	multipleStatements: config.db.multipleStatements,
 });
 
 // Función opcional para verificar conexión al iniciar

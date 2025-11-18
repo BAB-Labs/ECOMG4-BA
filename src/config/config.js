@@ -31,6 +31,7 @@ export const config = {
 	nodeEnv: process.env.NODE_ENV,
 	db: {
 		host: process.env.DB_HOST,
+		port: process.env.DB_PORT,
 		user: process.env.DB_USER,
 		password: process.env.DB_PASS,
 		database: process.env.DB_NAME,
@@ -41,6 +42,7 @@ export const config = {
 		idleTimeout: 60000,
 		enableKeepAlive: true,
 		keepAliveInitialDelay: 0,
+		multipleStatements: true,
 	},
 	cookie: {
 		cookieMaxAge: parseExpiration(process.env.JWT_EXPIRES_COOKIE),
