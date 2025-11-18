@@ -42,6 +42,7 @@ export const config = {
 		idleTimeout: 60000,
 		enableKeepAlive: true,
 		keepAliveInitialDelay: 0,
+		multipleStatements: true,
 	},
 	cookie: {
 		cookieMaxAge: parseExpiration(process.env.JWT_EXPIRES_COOKIE),

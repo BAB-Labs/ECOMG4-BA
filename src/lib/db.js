@@ -15,6 +15,7 @@ export const pool = mysql.createPool({
 	idleTimeout: config.db.idleTimeout,
 	enableKeepAlive: config.db.enableKeepAlive,
 	keepAliveInitialDelay: config.db.keepAliveInitialDelay,
+	multipleStatements: config.db.multipleStatements,
 });
 
 // Función opcional para verificar conexión al iniciar
